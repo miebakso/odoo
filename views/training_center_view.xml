@@ -1,0 +1,185 @@
+<odoo>
+	<data>
+		
+<!-- COURSE ================================================================================================================ -->
+
+		<record model="ir.ui.view" id="training_center_course_form">
+			<field name="name">training.center.course.form</field>
+			<field name="model">training.center.course</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="name" />
+						<field name="code" />
+						<field name="course_desc" />
+					</group>
+					<group>
+						<field name="syllabus_ids" nolabel="1">
+							<tree editable="bottom">
+								<field name="sequence" />
+								<field name="name" />
+								<field name="duration" widget="float_time" />
+								<field name="desc" />
+							</tree>
+						</field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="training_center_course_tree">
+			<field name="name">training.center.course.tree</field>
+			<field name="model">training.center.course</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="code" />
+					<field name="name" />
+					<field name="course_desc" />
+					<field name="syllabus_ids" />
+				</tree>
+			</field>
+		</record>
+
+<!-- COURSE ================================================================================================================ -->
+
+		<record model="ir.ui.view" id="training_center_participant_form">
+			<field name="name">training.center.participant.form</field>
+			<field name="model">training.center.participant</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="name" />
+						<field name="address" />
+						<field name="phone" />
+						<field name="email" />
+						<field name="birth_date" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="training_center_participant_tree">
+			<field name="name">training.center.participant.tree</field>
+			<field name="model">training.center.participant</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" />
+					<field name="address" />
+					<field name="phone" />
+					<field name="email" />
+					<field name="birth_date" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="training_center_trainer_form">
+			<field name="name">training.center.trainer.form</field>
+			<field name="model">training.center.trainer</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="name" />
+						<field name="gender" />
+						<field name="age" />
+						<field name="birth_date" />
+						<field name="address" />
+						<field name="email" />
+						<field name="phone" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="training_center_trainer_tree">
+			<field name="name">training.center.trainer.tree</field>
+			<field name="model">training.center.trainer</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" />
+					<field name="gender" />
+					<field name="age" />
+					<field name="birth_date" />
+					<field name="address" />
+					<field name="email" />
+					<field name="phone" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="training_center_session_form">
+			<field name="name">training.center.session.form</field>
+			<field name="model">training.center.session</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="code" />
+						<field name="desc" />
+						<field name="capacity" />
+						<field name="date" />
+						<field name="start_time" widget="float_time" />
+						<field name="duration" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="training_center_session_tree">
+			<field name="name">training.center.session.tree</field>
+			<field name="model">training.center.session</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="code" />
+						<field name="desc" />
+						<field name="capacity" />
+						<field name="date" />
+						<field name="start_time" widget="float_time" />
+						<field name="duration" />
+				</tree>
+			</field>
+		</record>
+ 		
+		<menuitem id="training_center_menu_root" name="Training center" sequence="20" />
+		<menuitem id="training_center_menu_config" name="Configuration" sequence="5" parent="training_center_menu_root" />
+
+		<record model="ir.actions.act_window" id="training_center_action_course">
+			<field name="name">Courses</field>
+			<field name="res_model">training.center.course</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="training_center_menu_course" sequence="1" parent="training_center_menu_config" action="training_center_action_course" />
+
+		<record model="ir.actions.act_window" id="training_center_action_participant">
+			<field name="name">Participant</field>
+			<field name="res_model">training.center.participant</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="training_center_menu_participant" sequence="2" parent="training_center_menu_config" action="training_center_action_participant" />
+
+		<record model="ir.actions.act_window" id="training_center_action_trainer">
+			<field name="name">Trainer</field>
+			<field name="res_model">training.center.trainer</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="training_center_menu_trainer" sequence="3" parent="training_center_menu_config" action="training_center_action_trainer" />
+
+		<record model="ir.actions.act_window" id="training_center_action_session">
+			<field name="name">Session</field>
+			<field name="res_model">training.center.session</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="training_center_menu_session" sequence="4" parent="training_center_menu_config" action="training_center_action_session" />
+
+
+	</data>
+</odoo>
