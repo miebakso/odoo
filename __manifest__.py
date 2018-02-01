@@ -1,25 +1,24 @@
 {
-	'name': 'Training Center System',
-	'version': '0.1',
-	'category': 'Training',
-	'description': """
-		Simple module for training center administration
-	""",
-	'author': 'Matthew Ariel',
-	'maintainer': 'Matthew Ariel',
-	'website': 'http://www.google.com',
-	'depends': ['base','web'],
-	'sequence': 150,
-	'data': [
-		'views/training_center_view.xml',
-	],
-	'demo': [
-	],
-	'test': [
-	],
-	'installable': True,
-	'auto_install': False,
-	'qweb': [
-	],
-
+    'name': 'Training Center System',
+    'description': 'Simple module for training center.',
+    'category': 'Training',
+    'version': '1.0.0',
+    'author': 'Test',
+    'maintainer': 'test',
+    'website': 'https://iaaaa.asd',
+    'sequence': 150,
+    'depends': [
+	    'base', 'web',
+    ],
+    'data': [
+        'views/training_center_view.xml',
+    ],
+    'qweb': [
+    ],
+    'demo': [
+    ],
+    'test': [
+    ],
+    'auto_install': False,
+    'installable': True,
 }
