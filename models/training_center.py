@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 # ==========================================================================================================================
 
@@ -34,6 +35,12 @@ class Syllabus(models.Model):
     desc = fields.Text('Syllabus Description')
     duration = fields.Float('Syllabus Duration')
     course_id = fields.Many2one('training.center.course', 'Course')
+
+    @api.constrains('duration')
+    def _check_duration_value(self):
+        for record in self:
+            if record.duration > 8 or record.duration < 0.5:
+                raise ValidationError('Duration must between 00:30 and 08:00')
 
 # ==========================================================================================================================
 
