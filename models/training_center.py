@@ -29,7 +29,7 @@ class Syllabus(models.Model):
     _name = 'training.center.syllabus'
     _description = 'Course syllabus master'
 
-    sequences = fields.Integer('Sequence', required=True)
+    sequence = fields.Integer('Sequence', required=True)
     name = fields.Char('Syllabus Name', size=20, required=True)
     desc = fields.Text('Syllabus Description')
     duration = fields.Float('Syllabus Duration')
@@ -60,6 +60,6 @@ class Participant(models.Model):
 
     name = fields.Char('Participant Name' ,size=40, required=True)
     address = fields.Char('Participant Address', size=40, required=True)
-	phone = fields.Char('Participant Phone Number', size=30, required=True)
-	email = fields.Char('Participant E-mail', size=50, required=True)
-	birth_date = fields.Date('Participant Birth Date', required=True)
+    phone = fields.Char('Participant Phone Number', size=30, required=True)
+    email = fields.Char('Participant E-mail', size=50, required=True)
+    birth_date = fields.Date('Participant Birth Date', required=True)
