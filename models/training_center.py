@@ -1,3 +1,5 @@
+import re
+
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
@@ -59,6 +61,14 @@ class Trainer(models.Model):
     email = fields.Char('E-mail', size=50, required=True)
     phone = fields.Char('Phone Number', size=20, required=True)
 
+    @api.constrains('email')
+    def _check_email_value(self):
+        email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
+        for record in self:
+            if not email_regex.match(record.email):
+                raise ValidationError('E-mail is invalid')
+
 # ==========================================================================================================================
 
 class Participant(models.Model):
@@ -70,3 +80,11 @@ class Participant(models.Model):
     phone = fields.Char('Participant Phone Number', size=30, required=True)
     email = fields.Char('Participant E-mail', size=50, required=True)
     birth_date = fields.Date('Participant Birth Date', required=True)
+
+    @api.constrains('email')
+    def _check_email_value(self):
+        email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
+        for record in self:
+            if not email_regex.match(record.email):
+                raise ValidationError('E-mail is invalid')
