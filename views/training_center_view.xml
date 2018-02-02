@@ -132,6 +132,7 @@
                 </tree>
             </field>
         </record>
+
         
         <record id="training_center_action_participant" model="ir.actions.act_window">
             <field name="name">Participants</field>
