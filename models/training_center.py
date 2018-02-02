@@ -12,7 +12,7 @@ class Course(models.Model):
     name = fields.Char('Course Name', size=40, required=True)
     code = fields.Char('Course Code', size=10, required=True)
     course_desc = fields.Text('Course Description')
-    syllabus_ids = fields.One2many('training.center.syllabus', 'course_id', 'Course Syllabuses')
+    syllabus_ids = fields.One2many('training.center.course.syllabus', 'course_id', 'Course Syllabuses')
 
     _sql_constraints = [
         ('unique_code', 'UNIQUE(code)', 'Course code must be unique.'),
@@ -29,7 +29,7 @@ class Session(models.Model):
 # ==========================================================================================================================
 
 class Syllabus(models.Model):
-    _name = 'training.center.syllabus'
+    _name = 'training.center.course.syllabus'
     _description = 'Course syllabus master'
 
     sequence = fields.Integer('Sequence', required=True)
@@ -41,8 +41,8 @@ class Syllabus(models.Model):
     @api.constrains('duration')
     def _check_duration_value(self):
         for record in self:
-            if record.duration > 8 or record.duration < 0.5:
-                raise ValidationError('Duration must between 00:30 and 08:00')
+            if record.duration >= 8 or record.duration <= 0.5:
+                raise ValidationError('Duration must rage from 00:30  to 08:00')
 
 # ==========================================================================================================================
 
@@ -53,10 +53,10 @@ class Trainer(models.Model):
     id_number = fields.Char('ID Number', size=16, required=True)
     name = fields.Char('Trainer Name', size=40, required=True)
     gender = fields.Selection([
-        ('m', 'male'),
-        ('f', 'female')
-        ], 'Gender', required=True)
-    age = fields.Integer('Age', required=True)
+        ('m', 'Male'),
+        ('f', 'Female')
+        ], 'Gender', required=True, default='m')
+    age = fields.Integer('Age', required=True, default=10)
     birth_date = fields.Date('Birth Date', required=True)
     address = fields.Char('Address', size=100, required=True)
     email = fields.Char('E-mail', size=50, required=True)
@@ -69,16 +69,16 @@ class Trainer(models.Model):
     @api.constrains('age')
     def _check_age_value(self):
         for record in self:
-            if record.age <= 10:
-                raise ValidationError('Age must be greater than 10')
+            if record.age < 10:
+                raise ValidationError('Age must be greater or equal to 10')
 
     @api.constrains('id_number')
     def _check_id_number_value(self):
         for record in self:
             if len(record.id_number) != 16:
-                raise ValidationError('The length of ID number must be 16 digits')
+                raise ValidationError('The length of NIK number must be 16 digits')
             if not record.id_number.isdigit():
-                raise ValidationError('ID number must be a number')
+                raise ValidationError('NIK must be a number')
 
     @api.constrains('email')
     def _check_email_value(self):
@@ -87,6 +87,12 @@ class Trainer(models.Model):
         for record in self:
             if not email_regex.match(record.email):
                 raise ValidationError('E-mail is invalid')
+
+    @api.constrains('phone')
+    def _check_phone_value(self):
+        for record in self:
+            if not record.id_number.isdigit():
+                raise ValidationError('Invalid Phone Number')
 
 # ==========================================================================================================================
 
@@ -111,3 +117,9 @@ class Participant(models.Model):
         for record in self:
             if not email_regex.match(record.email):
                 raise ValidationError('E-mail is invalid')
+
+    @api.constrains('phone')
+    def _check_phone_value(self):
+        for record in self:
+            if not record.id_number.isdigit():
+                raise ValidationError('Invalid Phone Number')
