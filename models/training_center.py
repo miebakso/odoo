@@ -94,10 +94,6 @@ class Trainer(models.Model):
             if not email_regex.match(record.email):
                 raise ValidationError('E-mail is invalid')
 
-    _sql_constraints = [
-    	('unique_code','UNIQUE(email)','Email already used.')
-    ]
-
 # ==========================================================================================================================
 
 class Participant(models.Model):
