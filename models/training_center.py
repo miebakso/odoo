@@ -50,6 +50,7 @@ class Trainer(models.Model):
     _name = 'training.center.trainer'
     _description = 'Trainer master'
 
+    id_number = fields.Char('ID Number', size=16, required=True)
     name = fields.Char('Trainer Name', size=40, required=True)
     gender = fields.Selection([
         ('m', 'male'),
@@ -60,6 +61,14 @@ class Trainer(models.Model):
     address = fields.Char('Address', size=100, required=True)
     email = fields.Char('E-mail', size=50, required=True)
     phone = fields.Char('Phone Number', size=20, required=True)
+
+    @api.constrains('id_number')
+    def _check_id_number_value(self):
+        for record in self:
+            if len(record.id_number) != 16:
+                raise ValidationError('The length of ID number must be 16 digits')
+            if not record.id_number.isdigit():
+                raise ValidationError('ID number must be a number')
 
     @api.constrains('email')
     def _check_email_value(self):

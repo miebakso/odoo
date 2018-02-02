@@ -60,6 +60,7 @@
             <field name="arch" type="xml">
                 <form>
                     <group>
+                        <field name="id_number" />
                         <field name="name" />
                         <field name="gender" />
                         <field name="age" />
@@ -77,6 +78,7 @@
             <field name="model">training.center.trainer</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="id_number" />
                     <field name="name" />
                     <field name="gender" />
                     <field name="age" />
