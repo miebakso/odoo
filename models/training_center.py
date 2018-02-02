@@ -2,6 +2,9 @@ import re
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import datetime,time
+import logging
+_logger = logging.getLogger(__name__)
 
 # ==========================================================================================================================
 
@@ -111,9 +114,10 @@ class Participant(models.Model):
 
     name = fields.Char('Participant Name' ,size=40, required=True)
     address = fields.Char('Participant Address', size=40, required=True)
-    phone = fields.Integer('Participant Phone Number', required=True)
+    phone = fields.Char('Participant Phone Number', required=True)
     email = fields.Char('Participant E-mail', size=50, required=True)
     birth_date = fields.Date('Participant Birth Date', required=True)
+    par_id = fields.Char('Participant id ', size=9, compute='_compute_id')
 
     _sql_constraints = [
         ('unique_email','UNIQUE(email)','Email has already been used.')
@@ -121,8 +125,8 @@ class Participant(models.Model):
 
     @api.constrains('email')
     def _check_email_value(self):
-        email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
+        email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
         for record in self:
             if not email_regex.match(record.email):
                 raise ValidationError('E-mail is invalid')
@@ -130,8 +134,43 @@ class Participant(models.Model):
     @api.constrains('phone')
     def _check_phone_value(self):
         for record in self:
-            if not record.id_number.isdigit():
+            if not record.phone.isdigit():
                 raise ValidationError('Invalid Phone Number')
 
+    @api.one
+    def _compute_id(self):
+        year = datetime.datetime.now().strftime("%Y")
+        template = year+"00000"
+        par_id = int (template)+self.id
+        # self.write('par_id': par_id) 
+        self.par_id = par_id
+    
+    # def create(self, vals):
+    #     survey_id = self.env['hr_evaluation.plan.phase'].browse(vals.get('phase_id'))
+
+    #     if vals.get('user_id'):
+    #         partner_id = self.env['res.users'].browse(vals.get('user_id'))
+    #     else:
+    #         partner_id = None
+
+    #     if not vals.get('deadline'):
+    #         vals['deadline'] = (datetime.now() + timedelta(days=28)).strftime(DF)
+
+    #     ret = self.env['survey.user_input'].create({'survey_id': survey_id.id,
+    #                                           'deadline': vals.get('deadline'),
+    #                                           'type': 'link',
+    #                                           'partner_id': partner_id.id})
+    #     vals['request_id'] = ret.id
+    #     return super(hr_evaluation_interview, self).create(vals)
 
 
+    # def create(self, values):
+    #         # Override the original create function for the res.partner model
+    #         record = super(res_partner, self).create(values)
+
+    #         # Change the values of a variable in this super function
+    #         record['passed_override_write_function'] = True
+    #         print 'Passed this function. passed_override_write_function value: ' + str(record['passed_override_write_function'])
+
+    #         # Return the record so that the changes are applied and everything is stored.
+    #     return record
