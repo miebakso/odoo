@@ -131,6 +131,15 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="training_center_participant_search_view">
+            <field name="name">training.center.participant.search</field>
+            <field name="model">training.center.participant</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="email" string="Name or email" filter_domain="['|',('name','ilike',self),('email','ilike',self)]" />
+                </search>
+            </field>
+        </record>
         
         <record id="training_center_action_participant" model="ir.actions.act_window">
             <field name="name">Participants</field>
