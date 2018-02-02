@@ -62,6 +62,12 @@ class Trainer(models.Model):
     email = fields.Char('E-mail', size=50, required=True)
     phone = fields.Char('Phone Number', size=20, required=True)
 
+    @api.constrains('age')
+    def _check_age_value(self):
+        for record in self:
+            if record.age <= 10:
+                raise ValidationError('Age must be greater than 10')
+
     @api.constrains('id_number')
     def _check_id_number_value(self):
         for record in self:
