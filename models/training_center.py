@@ -16,7 +16,7 @@ class Course(models.Model):
 
     _sql_constraints = [
         ('unique_code', 'UNIQUE(code)', 'Course code must be unique.'),
-        ('unique_code', 'UNIQUE(name)', 'Course name must be unique.'),
+        ('unique_name', 'UNIQUE(name)', 'Course name must be unique.'),
     ]
 
 # ==========================================================================================================================
@@ -34,13 +34,13 @@ class Syllabus(models.Model):
     _description = 'Course syllabus master'
 
     sequence = fields.Integer('Sequence', required=True)
-    name = fields.Char('Syllabus Name', size=20, required=True)
+    name = fields.Char('Syllabus Title', size=20, required=True)
     desc = fields.Text('Syllabus Description')
     duration = fields.Float('Syllabus Duration')
     course_id = fields.Many2one('training.center.course', 'Course')
 
     _sql_constraints = [
-    	('unique_code', 'UNIQUE(name)', 'Syllabus name must be unique.'),
+    	('unique_name_in_course', 'UNIQUE(name, course_id)', 'Title has already existed in this course.'),
     ]
 
     @api.constrains('duration')
@@ -116,7 +116,7 @@ class Participant(models.Model):
     birth_date = fields.Date('Participant Birth Date', required=True)
 
     _sql_constraints = [
-        ('unique_code','UNIQUE(email)','Email has already been used.')
+        ('unique_email','UNIQUE(email)','Email has already been used.')
     ]
 
     @api.constrains('email')
