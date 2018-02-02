@@ -111,7 +111,7 @@ class Participant(models.Model):
 
     name = fields.Char('Participant Name' ,size=40, required=True)
     address = fields.Char('Participant Address', size=40, required=True)
-    phone = fields.Integer('Participant Phone Number', required=True)
+    phone = fields.Char('Participant Phone Number', size = 20, required=True)
     email = fields.Char('Participant E-mail', size=50, required=True)
     birth_date = fields.Date('Participant Birth Date', required=True)
 
@@ -130,7 +130,7 @@ class Participant(models.Model):
     @api.constrains('phone')
     def _check_phone_value(self):
         for record in self:
-            if not record.id_number.isdigit():
+            if not record.phone.isdigit():
                 raise ValidationError('Invalid Phone Number')
 
 
