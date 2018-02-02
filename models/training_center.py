@@ -16,6 +16,7 @@ class Course(models.Model):
 
     _sql_constraints = [
         ('unique_code', 'UNIQUE(code)', 'Course code must be unique.'),
+        ('unique_code', 'UNIQUE(name)', 'Course name must be unique.'),
     ]
 
 # ==========================================================================================================================
@@ -38,11 +39,16 @@ class Syllabus(models.Model):
     duration = fields.Float('Syllabus Duration')
     course_id = fields.Many2one('training.center.course', 'Course')
 
+    _sql_constraints = [
+    	('unique_code', 'UNIQUE(name)', 'Syllabus name must be unique.'),
+    ]
+
     @api.constrains('duration')
     def _check_duration_value(self):
         for record in self:
             if record.duration > 8 or record.duration < 0.5:
                 raise ValidationError('Duration must between 00:30 and 08:00')
+
 
 # ==========================================================================================================================
 
@@ -69,6 +75,10 @@ class Trainer(models.Model):
             if not email_regex.match(record.email):
                 raise ValidationError('E-mail is invalid')
 
+    _sql_constraints = [
+    	('unique_code','UNIQUE(email)','Email already used.')
+    ]
+
 # ==========================================================================================================================
 
 class Participant(models.Model):
@@ -77,7 +87,7 @@ class Participant(models.Model):
 
     name = fields.Char('Participant Name' ,size=40, required=True)
     address = fields.Char('Participant Address', size=40, required=True)
-    phone = fields.Char('Participant Phone Number', size=30, required=True)
+    phone = fields.Integer('Participant Phone Number', required=True)
     email = fields.Char('Participant E-mail', size=50, required=True)
     birth_date = fields.Date('Participant Birth Date', required=True)
 
@@ -88,3 +98,7 @@ class Participant(models.Model):
         for record in self:
             if not email_regex.match(record.email):
                 raise ValidationError('E-mail is invalid')
+
+    _sql_constraints = [
+    	('unique_code','UNIQUE(email)','Email already used.')
+    ]
