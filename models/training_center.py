@@ -62,6 +62,10 @@ class Trainer(models.Model):
     email = fields.Char('E-mail', size=50, required=True)
     phone = fields.Char('Phone Number', size=20, required=True)
 
+    _sql_constraints = [
+        ('unique_email', 'UNIQUE(email)', 'E-mail must be unique')
+    ]
+
     @api.constrains('age')
     def _check_age_value(self):
         for record in self:
@@ -95,6 +99,10 @@ class Participant(models.Model):
     phone = fields.Char('Participant Phone Number', size=30, required=True)
     email = fields.Char('Participant E-mail', size=50, required=True)
     birth_date = fields.Date('Participant Birth Date', required=True)
+
+    _sql_constraints = [
+        ('unique_email', 'UNIQUE(email)', 'E-mail must be unique')
+    ]
 
     @api.constrains('email')
     def _check_email_value(self):
