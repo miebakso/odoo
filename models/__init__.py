@@ -1,1 +1,2 @@
-import training_center
+import course_trainer
+import course_class
