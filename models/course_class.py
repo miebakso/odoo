@@ -28,7 +28,7 @@ class CourseClass(models.Model):
 	capacity = fields.Integer('Capacity', required=True)
 
 	_sql_constraints = {
-		('check_capacity','CHECK(capacity > 0)','Capacity must be more than zepr.'),
+		('check_capacity','CHECK(capacity > 0)','Capacity must be more than zero.'),
 	}
 
 	@api.onchange('course_id')
