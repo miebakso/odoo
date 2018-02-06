@@ -10,6 +10,7 @@
 				<form>
 					<header>
 						<field name="state" readonly="1" widget="statusbar" />
+						<button string="Open Class" type="object" name="open_class" class="oe_highlight" attrs="{'invisible': [('state','=','open','ongoing','done','canceled')]}" confirm="Are you sure to open this class?" />
 					</header>
 					<group>
 						<group>
@@ -41,8 +42,9 @@
 						<page string="Participants">
 							<group>
 								<field name="participant_ids" readonly="1" nolabel="1">
-									<tree editable="botoom">
+									<tree editable="bottom" create="false">
 										<field name="participant_id" />
+										<field name="name" />
 									</tree>
 								</field>
 							</group>

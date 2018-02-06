@@ -26,6 +26,7 @@ class CourseClass(models.Model):
 	session_ids = fields.One2many('training.center.class.session','class_id','Sessions')
 	participant_ids = fields.One2many('training.center.class.participant','class_id','Participant')
 	capacity = fields.Integer('Capacity', required=True)
+	open_class = fields.Char(required=True,default='Open Class')
 
 	_sql_constraints = {
 		('check_capacity','CHECK(capacity > 0)','Capacity must be more than zero.'),
@@ -43,8 +44,6 @@ class CourseClass(models.Model):
 				'duration': session.duration,
 				}])
 		self.session_ids = sessions
-
-	# batasi pilihan trainer
 	
 		trainer_ids = []
 		for trainer in self.course_id.trainer_ids:
@@ -55,6 +54,14 @@ class CourseClass(models.Model):
 				'trainer_id': domain,
 			}
 		}
+
+	@api.one
+	def open_class(self):
+		self.write({
+				'state':'open',
+				'open_date' : fields.Date.context_today(self),
+			})
+
 # ==========================================================================================================================
 
 class ClassSession(models.Model):
@@ -132,12 +139,12 @@ class Participant(models.Model):
 		self.par_id = par_id
 	"""
 
-
 # ==========================================================================================================================
-
-class ClasslassParticipant(models.Model):
+# buat nampilin participant ke course class
+class ClassParticipant(models.Model):
 	_name = 'training.center.class.participant'
 	_description = 'Class participant'
 
 	class_id = fields.Many2one('training.center.class', 'Class', ondelete="cascade")
-	participant_id = fields.Many2one('training.center.participant','Participant', ondelete="cascade")
+	participant_id = fields.Many2one('training.center.participant','Participant ID', ondelete="cascade")
+	name = fields.Char('Participant Name', size=20, required=True)
