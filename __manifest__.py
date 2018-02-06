@@ -8,7 +8,9 @@
 	'website': 'https://iaaaa.asd',
 	'sequence': 150,
 	'depends': [
-		'base', 'web',
+		'base', 
+		'web',
+		'report',
 	],
 	'data': [
 		'views/course_trainer_view.xml',
