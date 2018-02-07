@@ -61,6 +61,7 @@
 					</header>
 					<group>
 						<group>
+							<field name="name" />
 							<field name="course_id" />
 							<field name="trainer_id" />
 							<field name="capacity" />
@@ -69,6 +70,7 @@
 							<field name="open_date" attrs="{'readonly':[('state','=','open')]}" />
 							<field name="start_date" />
 							<field name="finish_date" />
+							<field name="total_participant" />
 						</group>
 					</group>
 					<notebook>
@@ -91,7 +93,7 @@
 								<field name="participant_ids" readonly="1" nolabel="1">
 									<tree editable="bottom" create="false">
 										<field name="participant_id" />
-										<field name="name" />
+										<!-- <field name="name" /> -->
 									</tree>
 								</field>
 							</group>
@@ -106,6 +108,7 @@
 			<field name="model">training.center.class</field>
 			<field name="arch" type="xml">
 				<tree>
+					<field name="name" />
 					<field name="course_id" />
 					<field name="trainer_id" />
 					<field name="open_date" />
@@ -182,6 +185,42 @@
 		</record>
 
 		<menuitem id="training_center_menu_participant" sequence="3" parent="training_center_menu_config" action="training_center_action_participant" />
+
+<!-- PARTICIPANTS ========================================================================================================== -->
+		
+		<record id="training_center_class_participant_form" model="ir.ui.view">
+			<field name="name">training.center.class.participant.form</field>
+			<field name="model">training.center.class.participant</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="participant_id" />
+						<field name="class_id" />
+					</group>
+				</form>
+			</field>
+		</record>
+		
+		<record id="training_center_class_participant_tree" model="ir.ui.view">
+			<field name="name">training.center.class.participant.tree</field>
+			<field name="model">training.center.class.participant</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="participant_id" />
+					<field name="class_id" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="training_center_action_class_participant" model="ir.actions.act_window">
+			<field name="name">Class participant</field>
+			<field name="res_model">training.center.class.participant</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="training_center_menu_class_participant" sequence="3" parent="training_center_menu_config" action="training_center_action_class_participant" />
 
 	</data>
  </odoo>

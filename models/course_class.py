@@ -27,10 +27,24 @@ class CourseClass(models.Model):
 	participant_ids = fields.One2many('training.center.class.participant','class_id','Participant')
 	capacity = fields.Integer('Capacity', required=True)
 	open_class = fields.Char(required=True,default='Open Class')
+	name = fields.Char('class name', size=20, required=True)
+	total_participant = fields.Integer('total participant',readonly=True)
 
 	_sql_constraints = {
 		('check_capacity','CHECK(capacity > 0)','Capacity must be more than zero.'),
 	}
+
+	@api.model
+	def create(self, vals):
+		#isikan nomor urut peserta secara otomatis
+		latest_seq = self.search([('total_participant')], order="sequence DESC", limit = 1)
+		if len(latest_seq) == 0:
+			new_seq = 1
+		else:
+			latest_seq = latest_seq.sequence
+			new_seq = latest_seq.sequence
+		vals['sequence'] = new_seq
+		return super(Participant, self).create(vals)
 
 	@api.onchange('course_id')
 	def onchange_course_id(self):
@@ -54,6 +68,22 @@ class CourseClass(models.Model):
 				'trainer_id': domain,
 			}
 		}
+
+		participants = []
+		for participant in self.participant_ids.participant_id:
+			participants.append(participant.participant_id.par_id)
+		domain = [('id','in',participants)]
+		return {
+			'domain': {
+				'participant_id': domain,
+			}
+		}
+
+	@api.constrains('total_participant')
+	def _check_total_participant_value(self):
+		for record in self:
+			if record.total_participant > record.capacity:
+				raise ValidationError('participant has exceed the capacity')
 
 	@api.one
 	def open_class(self):
@@ -119,7 +149,20 @@ class Participant(models.Model):
 	@api.model
 	def create(self, vals):
 		#isikan nomor urut peserta secara otomatis
-		year = datetime.datetime.now().strftime("%Y")
+		year = datetime.now().strftime("%Y")
+		latest_seq = self.search([('sequence')], order="sequence DESC", limit = 1)
+		if len(latest_seq) == 0:
+			new_seq = 1
+		else:
+			latest_seq = latest_seq.sequence
+			new_seq = latest_seq.sequence
+		vals['sequence'] = new_seq
+		return super(Participant, self).create(vals)
+
+	@api.model
+	def create(self, vals):
+		#isikan nomor urut peserta secara otomatis
+		year = datetime.now().strftime("%Y")
 		latest_par = self.search([('par_id','like',year)], order="par_id DESC", limit = 1)
 		if len(latest_par) == 0:
 			new_id = "%s00001" % (year)
@@ -128,7 +171,7 @@ class Participant(models.Model):
 			new_id = str(int(latest_id)+1)
 		vals['par_id'] = new_id
 		return super(Participant, self).create(vals)
-
+		
 	"""
 	@api.one
 	def _compute_id(self):
@@ -147,4 +190,4 @@ class ClassParticipant(models.Model):
 
 	class_id = fields.Many2one('training.center.class', 'Class', ondelete="cascade")
 	participant_id = fields.Many2one('training.center.participant','Participant ID', ondelete="cascade")
-	name = fields.Char('Participant Name', size=20, required=True)
+	# name = fields.Char('Participant Name', size=20, required=True)

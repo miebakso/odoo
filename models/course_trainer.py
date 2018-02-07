@@ -31,7 +31,7 @@ class Syllabus(models.Model):
 	_name = 'training.center.course.syllabus'
 	_description = 'Course syllabus master'
 
-	sequence = fields.Integer('Sequence', required=True)
+	sequence = fields.Integer('Sequence' )
 	name = fields.Char('Syllabus Title', size=20, required=True)
 	desc = fields.Text('Syllabus Description')
 	duration = fields.Float('Syllabus Duration')
@@ -46,6 +46,20 @@ class Syllabus(models.Model):
 		for record in self:
 			if record.duration >= 8 or record.duration <= 0.5:
 				raise ValidationError('Duration must rage from 00:30  to 08:00')
+
+	# @api.model
+	# def create(self, vals):
+	# 	#isikan nomor urut peserta secara otomatis
+	# 	temp = int(self.course_id)
+	# 	print self.course_id
+	# 	latest_seq = self.search([('course_id','=',temp)], order="sequence DESC", limit = 1)
+	# 	raise ValidationError(latest_seq[0])
+	# 	if len(latest_seq) == 0:
+	# 		new_seq = 1
+	# 	else:
+	# 		new_seq = str(int(latest_seq)+1)
+	# 	vals['sequence'] = new_seq
+	# 	return super(Syllabus, self).create(vals)
 
 
 # ==========================================================================================================================
