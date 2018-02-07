@@ -34,14 +34,14 @@
 					<div class="page">
 						<div class="row bg-primary">
 							<div class="col-xs-3">
-								tests
+								<h2>tests</h2>
 							</div>
 						</div>
 
 						<t t-foreach="docs" t-as="o">
 							<div class="row">
 								<div class="col-xs-3">
-									<span t-field="o.course_id"></span>
+									<h2 t-field="o.course_id"></h2>
 								</div>
 							</div>
 						</t>
