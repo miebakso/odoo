@@ -41,6 +41,7 @@
 						<t t-foreach="docs" t-as="o">
 							<div class="row">
 								<div class="col-xs-3">
+
 									<h2 t-field="o.course_id"></h2>
 								</div>
 							</div>
