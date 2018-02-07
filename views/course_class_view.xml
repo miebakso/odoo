@@ -2,6 +2,34 @@
 	<data>
 
 <!-- CLASS ========================================================================================================== -->
+		
+		<!-- MASIH SLAH ValueError: External ID not found in the system: training_center.class
+		<report
+			id="training_center_class_report"
+			model="training.center.class"
+			string="Print Couse Class"
+			report_type="qweb-pdf"
+			name="training_center.class"
+			file="training_center.class"
+		/>
+
+		-->
+		
+		<!--
+		<record id="paperformat_frenchcheck" model="report.paperformat">
+			<field name="name">French Bank Check</field>
+			<field name="default" eval="True"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">3</field>
+			<field name="margin_bottom">3</field>
+			<field name="margin_left">3</field>
+			<field name="margin_right">3</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">3</field>
+			<field name="dpi">80</field>
+		</record>
+		-->
 
 		<record id="training_center_class_form" model="ir.ui.view">
 			<field name="name">training.center.class.form</field>
@@ -11,6 +39,10 @@
 					<header>
 						<field name="state" readonly="1" widget="statusbar" />
 						<button string="Open Class" type="object" name="open_class" class="oe_highlight" attrs="{'invisible': [('state','=','open','ongoing','done','canceled')]}" confirm="Are you sure to open this class?" />
+
+						<!--
+						<button name="training_center_class_report" string="Print Course Classes" type="action" />
+						-->
 					</header>
 					<group>
 						<group>
