@@ -28,23 +28,12 @@ class CourseClass(models.Model):
 	capacity = fields.Integer('Capacity', required=True)
 	open_class = fields.Char(required=True,default='Open Class')
 	name = fields.Char('class name', size=20, required=True)
-	total_participant = fields.Integer('total participant',readonly=True)
+	total_participant = fields.Integer('total participant', compute='_compute_total')
 
 	_sql_constraints = {
 		('check_capacity','CHECK(capacity > 0)','Capacity must be more than zero.'),
+		('check_total','CHECK(total_participant > capacity)','total participant exceed the capacity.'),
 	}
-
-	@api.model
-	def create(self, vals):
-		#isikan nomor urut peserta secara otomatis
-		latest_seq = self.search([('total_participant')], order="sequence DESC", limit = 1)
-		if len(latest_seq) == 0:
-			new_seq = 1
-		else:
-			latest_seq = latest_seq.sequence
-			new_seq = latest_seq.sequence
-		vals['sequence'] = new_seq
-		return super(Participant, self).create(vals)
 
 	@api.onchange('course_id')
 	def onchange_course_id(self):
@@ -92,6 +81,13 @@ class CourseClass(models.Model):
 				'open_date' : fields.Date.context_today(self),
 			})
 
+	@api.one
+	def _compute_total(self):
+		self.total_participant=len(self.participant_ids)
+	# 	raise ValidationError(self.total_participant)
+
+
+
 # ==========================================================================================================================
 
 class ClassSession(models.Model):
@@ -110,7 +106,7 @@ class ClassSession(models.Model):
 	def onchange_duration_start(self):
 		if not (self.session_start and self.duration): return
 		session_start = datetime.strptime(self.session_start, DEFAULT_SERVER_DATETIME_FORMAT)
-		session_end = session_start + timedelta(hours=self.duration)
+		session_end = session_start + timedelta(hours=self.duration)	
 		self.session_end = session_end.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
 
@@ -191,3 +187,9 @@ class ClassParticipant(models.Model):
 	class_id = fields.Many2one('training.center.class', 'Class', ondelete="cascade")
 	participant_id = fields.Many2one('training.center.participant','Participant ID', ondelete="cascade")
 	# name = fields.Char('Participant Name', size=20, required=True)
+
+	_sql_constraints={
+
+	}
+	
+
