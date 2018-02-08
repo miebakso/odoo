@@ -45,7 +45,7 @@ class Syllabus(models.Model):
 	def _check_duration_value(self):
 		for record in self:
 			if record.duration >= 8 or record.duration <= 0.5:
-				raise ValidationError('Duration must rage from 00:30  to 08:00')
+				raise ValidationError('Duration must range between 00:30 and 08:00')
 
 	# @api.model
 	# def create(self, vals):
@@ -95,9 +95,9 @@ class Trainer(models.Model):
 	def _check_id_number_value(self):
 		for record in self:
 			if len(record.id_number) != 16:
-				raise ValidationError('The length of NIK number must be 16 digits')
+				raise ValidationError('The length of ID number must be 16 digits')
 			if not record.id_number.isdigit():
-				raise ValidationError('NIK must be a number')
+				raise ValidationError('ID number must be a number')
 
 	@api.constrains('email')
 	def _check_email_value(self):
@@ -111,7 +111,7 @@ class Trainer(models.Model):
 	@api.constrains('phone')
 	def _check_phone_value(self):
 		for record in self:
-			if not record.id_number.isdigit():
+			if not record.phone.isdigit():
 				raise ValidationError('Invalid Phone Number')
 
 
@@ -124,7 +124,7 @@ class TrainerCapability(models.Model):
 	trainer_id = fields.Many2one('training.center.trainer', 'Trainer', ondelete="cascade", required=True)
 	course_id = fields.Many2one('training.center.course', 'Course', ondelete="cascade", required=True)
 	level = fields.Selection([
-		("beginner","Beginner"),
+		("beginner", "Beginner"),
 		("intermediate", "Intermediate"),
-		("advanced","Advanced"),
+		("advanced", "Advanced"),
 		], 'level', required=True)

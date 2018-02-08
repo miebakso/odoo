@@ -27,12 +27,13 @@ class CourseClass(models.Model):
 	participant_ids = fields.One2many('training.center.class.participant','class_id','Participant')
 	capacity = fields.Integer('Capacity', required=True)
 	open_class = fields.Char(required=True,default='Open Class')
-	name = fields.Char('class name', size=20, required=True)
-	total_participant = fields.Integer('total participant', compute='_compute_total')
+	name = fields.Char('Class Name', size=20, required=True)
+	total_sessions = fields.Integer('Total', compute='_compute_total')
+	total_participant = fields.Integer('Total Participant', compute='_compute_total')
 
 	_sql_constraints = {
 		('check_capacity','CHECK(capacity > 0)','Capacity must be more than zero.'),
-		('check_total','CHECK(total_participant > capacity)','total participant exceed the capacity.'),
+		('check_total','CHECK(total_participant > capacity)','Total participant exceed the capacity.'),
 	}
 
 	@api.onchange('course_id')
@@ -72,7 +73,7 @@ class CourseClass(models.Model):
 	def _check_total_participant_value(self):
 		for record in self:
 			if record.total_participant > record.capacity:
-				raise ValidationError('participant has exceed the capacity')
+				raise ValidationError('Participant has exceed the capacity')
 
 	@api.one
 	def open_class(self):
@@ -81,12 +82,12 @@ class CourseClass(models.Model):
 				'open_date' : fields.Date.context_today(self),
 			})
 
-	@api.one
+	@api.multi
 	def _compute_total(self):
-		self.total_participant=len(self.participant_ids)
+		for record in self:
+			record.total_participant = len(record.participant_ids)
+			record.total_sessions = len(record.session_ids)
 	# 	raise ValidationError(self.total_participant)
-
-
 
 # ==========================================================================================================================
 
@@ -109,9 +110,7 @@ class ClassSession(models.Model):
 		session_end = session_start + timedelta(hours=self.duration)	
 		self.session_end = session_end.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-
 # ==========================================================================================================================
-
 
 class Participant(models.Model):
 	_name = 'training.center.participant'
@@ -122,7 +121,7 @@ class Participant(models.Model):
 	phone = fields.Char('Participant Phone Number', size = 20, required=True)
 	email = fields.Char('Participant E-mail', size=50, required=True)
 	birth_date = fields.Date('Participant Birth Date', required=True)
-	par_id = fields.Char('Participant id ', size=9, readonly=True)
+	par_id = fields.Char('Participant ID ', size=9, readonly=True)
 
 	_sql_constraints = [
 		('unique_email','UNIQUE(email)','Email has already been used.')
@@ -130,7 +129,6 @@ class Participant(models.Model):
 
 	@api.constrains('email')
 	def _check_email_value(self):
-
 		email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
 		for record in self:
 			if not email_regex.match(record.email):
@@ -179,17 +177,23 @@ class Participant(models.Model):
 	"""
 
 # ==========================================================================================================================
+
 # buat nampilin participant ke course class
 class ClassParticipant(models.Model):
 	_name = 'training.center.class.participant'
 	_description = 'Class participant'
 
-	class_id = fields.Many2one('training.center.class', 'Class', ondelete="cascade")
-	participant_id = fields.Many2one('training.center.participant','Participant ID', ondelete="cascade")
-	# name = fields.Char('Participant Name', size=20, required=True)
+	class_id = fields.Many2one('training.center.class', 'Class', required=True, ondelete="cascade")
+	participant_id = fields.Many2one('training.center.participant','Participant ID', required=True, ondelete="cascade")
 
-	_sql_constraints={
-
+	_sql_constraints = {
+		('unique_code', 'UNIQUE(class_id,participant_id)', 'Participant have already been registered in this class')
 	}
-	
 
+	@api.model
+	def create(self, vals):
+		# tidak boleh melebihi kapasitas kelas
+		class_data = self.env['training.center.class'].browse(vals.get('class_id', None))
+		if class_data.total_participant == class_data.capacity:
+			raise ValidationError('This class capacity is full.')
+		super(ClassParticipant, self).create(vals)
