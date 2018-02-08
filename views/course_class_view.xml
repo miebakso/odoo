@@ -23,7 +23,7 @@
 			id="training_center_class_report"
 			model="training.center.class"
 			string="Print Course Class"
-			report_type="qweb-html"
+			report_type="qweb-pdf"
 			name="training_center.report_class_template"
 			file="training_center.report_class_template"
 		/>
