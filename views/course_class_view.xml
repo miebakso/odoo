@@ -23,7 +23,7 @@
 			id="training_center_class_report"
 			model="training.center.class"
 			string="Print Course Class"
-			report_type="qweb-html"
+			report_type="qweb-pdf"
 			name="training_center.report_class_template"
 			file="training_center.report_class_template"
 		/>
@@ -34,14 +34,15 @@
 					<div class="page">
 						<div class="row bg-primary">
 							<div class="col-xs-3">
-								tests
+								<h2>tests</h2>
 							</div>
 						</div>
 
 						<t t-foreach="docs" t-as="o">
 							<div class="row">
 								<div class="col-xs-3">
-									<span t-field="o.course_id"></span>
+
+									<h2 t-field="o.course_id"></h2>
 								</div>
 							</div>
 						</t>
