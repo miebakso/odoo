@@ -9,8 +9,9 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>
-						<field name="state" readonly="1" widget="statusbar" />
-						<button string="Open Class" type="object" name="open_class" class="oe_highlight" attrs="{'invisible': [('state','=','open','ongoing','done','canceled')]}" confirm="Are you sure to open this class?" />
+				 		<field name="state" readonly="1" widget="statusbar" />
+						<button string="Open Class" type="object" name="open_class" class="oe_highlight" attrs="{'invisible': [('state','!=','draft')]}" confirm="Are you sure to open this class?" />
+						<button string="Start Class" type="object" name="start_class" class="oe_highlight" attrs="{'invisible': [('state','!=','open')]}" confirm="Are you sure to start this class?" />
 					</header>
 					<group>
 						<group>
@@ -139,7 +140,7 @@
 
 		<menuitem id="training_center_menu_participant" sequence="3" parent="training_center_menu_config" action="training_center_action_participant" />
 
-<!-- PARTICIPANTS ========================================================================================================== -->
+<!-- CLASS PARTICIPANTS ==================================================================================================== -->
 		
 		<record id="training_center_class_participant_form" model="ir.ui.view">
 			<field name="name">training.center.class.participant.form</field>
@@ -174,5 +175,36 @@
 
 		<menuitem id="training_center_menu_class_participant" sequence="3" parent="training_center_class_root" action="training_center_action_class_participant" />
 
+<!-- PARTICIPANTS ABSENCE ================================================================================================== -->
+
+		<record id="training_center_class_session_form" model="ir.ui.view">
+			<field name="name">training.center.class.session.form</field>
+			<field name="model">training.center.class.session</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<group>
+							<field name="sequence" />
+							<field name="name" />
+							<field name="desc" />
+						</group>
+						<group>
+							<field name="duration" />
+							<field name="session_start" />
+							<field name="session_end" />
+						</group>
+					</group>
+					<group string="Participant Absence">
+						<field name="class_participant_absent_ids" nolabel="1">
+							<tree editable="bottom">
+								<field name="class_participant_id" />
+								<field name="attendance" />
+							</tree>
+						</field>
+					</group>
+				</form>
+			</field>
+		</record>
+		
 	</data>
  </odoo>

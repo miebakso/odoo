@@ -22,7 +22,7 @@ class CourseClass(models.Model):
 		('ongoing','Ongoing'),
 		('done','Done'),
 		('canceled','Canceled')
-		), 'state', default="draft")
+		), 'State', default="draft")
 	session_ids = fields.One2many('training.center.class.session','class_id','Sessions')
 	participant_ids = fields.One2many('training.center.class.participant','class_id','Participant')
 	capacity = fields.Integer('Capacity', required=True)
@@ -81,6 +81,21 @@ class CourseClass(models.Model):
 				'state':'open',
 				'open_date' : fields.Date.context_today(self),
 			})
+	
+	@api.one
+	def start_class(self):
+		self.write({
+			'state':'ongoing',
+			'start_date' : fields.Date.context_today(self),
+		})
+
+		for session in self.session_ids:
+			for participant in self.participant_ids:
+				self.env['training.center.class.session.participant.absence'].create({
+					'session_id': session.id,
+					'class_participant_id': participant.id,
+				})
+				self.env.cr.commit()
 
 	@api.multi
 	def _compute_total(self):
@@ -102,6 +117,7 @@ class ClassSession(models.Model):
 	duration = fields.Float('Syllabus Duration')
 	session_start = fields.Datetime('Session Start', required=True)
 	session_end = fields.Datetime('Session End', required=True)
+	class_participant_absent_ids = fields.One2many('training.center.class.session.participant.absence', 'session_id', 'Participant Absence')
 
 	@api.onchange('duration','session_start')
 	def onchange_duration_start(self):
@@ -186,14 +202,26 @@ class ClassParticipant(models.Model):
 	class_id = fields.Many2one('training.center.class', 'Class', required=True, ondelete="cascade")
 	participant_id = fields.Many2one('training.center.participant','Participant ID', required=True, ondelete="cascade")
 
+	_rec_name = 'participant_id'
 	_sql_constraints = {
 		('unique_code', 'UNIQUE(class_id,participant_id)', 'Participant have already been registered in this class')
 	}
 
-	@api.model
-	def create(self, vals):
-		# tidak boleh melebihi kapasitas kelas
-		class_data = self.env['training.center.class'].browse(vals.get('class_id', None))
-		if class_data.total_participant == class_data.capacity:
-			raise ValidationError('This class capacity is full.')
-		super(ClassParticipant, self).create(vals)
+	# @api.model
+	# def create(self, vals):
+	# 	# tidak boleh melebihi kapasitas kelas
+	# 	class_data = self.env['training.center.class'].browse(vals.get('class_id', None))
+	# 	if class_data.total_participant == class_data.capacity:
+	# 		raise ValidationError('This class capacity is full.')
+	# 	print("%s" % vals)
+	# 	super(ClassParticipant, self).create(vals)
+
+# ==========================================================================================================================
+
+class ParticipantAbsence(models.Model):
+	_name = 'training.center.class.session.participant.absence'
+	_description = 'Participant absence'
+
+	session_id = fields.Many2one('training.center.class.session', 'Session', ondelete="cascade", required=True)
+	class_participant_id = fields.Many2one('training.center.class.participant', 'Class Participant', ondelete="cascade", required=True)
+	attendance = fields.Boolean('Attendance', default=False)
