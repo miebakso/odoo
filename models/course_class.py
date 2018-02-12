@@ -207,14 +207,14 @@ class ClassParticipant(models.Model):
 		('unique_code', 'UNIQUE(class_id,participant_id)', 'Participant have already been registered in this class')
 	}
 
-	# @api.model
-	# def create(self, vals):
-	# 	# tidak boleh melebihi kapasitas kelas
-	# 	class_data = self.env['training.center.class'].browse(vals.get('class_id', None))
-	# 	if class_data.total_participant == class_data.capacity:
-	# 		raise ValidationError('This class capacity is full.')
-	# 	print("%s" % vals)
-	# 	super(ClassParticipant, self).create(vals)
+	@api.model
+	def create(self, vals):
+		# tidak boleh melebihi kapasitas kelas
+		class_data = self.env['training.center.class'].browse(vals.get('class_id', None))
+		if class_data.total_participant == class_data.capacity:
+			raise ValidationError('This class capacity is full.')
+		print("%s" % vals)
+		return super(ClassParticipant, self).create(vals)
 
 # ==========================================================================================================================
 
