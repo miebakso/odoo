@@ -9,7 +9,7 @@ from odoo.exceptions import ValidationError
 
 class Academy(http.Controller):
 	
-	@http.route('/test', auth='public')
+	@http.route('/classes', auth='public')
 	def index(self, **kw):
 		mode = http.request.env['training.center.class']
 		classes = mode.search([['state', '=', 'open']])
