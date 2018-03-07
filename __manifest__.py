@@ -11,12 +11,14 @@
 		'base', 
 		'web',
 		'report',
+		'website',
 	],
 	'data': [
 		'views/course_trainer_view.xml',
 		'views/course_class_view.xml',
 		'reports/report_attendance_list.xml',
 		'reports/training_center.xml',
+		'views/templates.xml',
 	],
 	'qweb': [
 	],

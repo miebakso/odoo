@@ -1,0 +1,41 @@
+
+<odoo>
+	<data>
+
+	<template id="index">
+		
+		<title>Test</title>			
+			
+		<link rel='stylesheet' type="text/css" href='/web/static/lib/bootstrap/css/bootstrap.css'/>
+
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<ul>
+					<li>asd</li>
+				</ul>
+			</div>
+		</nav>
+
+
+		<div class="container">
+
+			<table class="table">
+				<tr>
+					<th>Class Name</th>
+					<th>Course Name</th>
+					<th>Start Date</th>
+				</tr>
+				<t t-foreach="classes" t-as="cl">
+					<tr>
+						<td> <t t-esc="cl.name" /> </td>
+						<td> <t t-esc="cl.course_id.name" /> </td>
+						<td> <t t-esc="cl.start_date" /> </td>
+					</tr>
+				</t>
+			</table> 
+		</div>
+	</template>
+
+	</data>
+</odoo>

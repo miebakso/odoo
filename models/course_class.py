@@ -5,6 +5,10 @@ from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.exceptions import ValidationError
 from datetime import datetime, time, timedelta
 
+
+
+
+
 # ==========================================================================================================================
 
 class CourseClass(models.Model):
