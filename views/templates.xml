@@ -71,7 +71,7 @@
 								</div>
 								<div class="col-md-12" >
 									<center>
-										<a href="#" class="btn btn-success btn-sm active" role="button">Register</a>
+										<a t-attf-href="/classes/register/{{cl.id}}" t-attf-class="btn btn-success btn-sm active" t-attf-role="button">Register</a>
 									</center>
 								</div>
 							</div>

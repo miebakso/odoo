@@ -19,6 +19,7 @@
 		'reports/report_attendance_list.xml',
 		'reports/training_center.xml',
 		'views/templates.xml',
+		'views/form.xml',
 	],
 	'qweb': [
 	],
