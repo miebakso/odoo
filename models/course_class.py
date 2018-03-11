@@ -17,7 +17,7 @@ class CourseClass(models.Model):
 
 	course_id = fields.Many2one('training.center.course','Course', required=True, ondelete="restrict")
 	open_date = fields.Date('Open Date', required=True)
-	start_date = fields.Date('Start Date', readonly=True)
+	start_date = fields.Date('Start Date')
 	finish_date = fields.Date('Finished Date', readonly=True)
 	trainer_id = fields.Many2one('training.center.trainer','Trainer', ondelete="restrict")
 	state = fields.Selection((
@@ -83,7 +83,7 @@ class CourseClass(models.Model):
 	def open_class(self):
 		self.write({
 				'state':'open',
-				'open_date' : fields.Date.context_today(self),
+				# 'open_date' : fields.Date.context_today(self),
 			})
 	
 	@api.one

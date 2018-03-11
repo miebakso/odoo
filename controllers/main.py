@@ -12,7 +12,7 @@ class Academy(http.Controller):
 	@http.route('/classes', auth='public')
 	def index(self):
 		mode = http.request.env['training.center.class']
-		classes = mode.search([['state', '=', 'open']])
+		classes = mode.search([['state', '=', 'draft']])
 		return http.request.render('training_center.index', {
 			'classes': classes
 		})

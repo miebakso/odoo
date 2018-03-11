@@ -80,7 +80,7 @@
 							<field name="id_number" />
 							<field name="name" />
 							<field name="gender" class="oe_inline" />
-							<field name="age" />
+							<field name="age" readonly="1"/>
 							<field name="birth_date" class="oe_inline" />
 						</group>
 						<group>

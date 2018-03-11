@@ -21,7 +21,8 @@
 							<field name="capacity" />
 						</group>
 						<group>
-							<field name="open_date" attrs="{'readonly':[('state','=','open')]}" />
+							<!-- <field name="open_date" attrs="{'readonly':[('state','=','open')]}" /> -->
+							<field name="open_date"/>
 							<field name="start_date" />
 							<field name="finish_date" />
 							<field name="total_participant" />
