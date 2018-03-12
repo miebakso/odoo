@@ -43,17 +43,18 @@
 				<div class="panel-body">
 					<form class="form-horizontal" method="post" action="/classes">
 						<div class="row">
+							<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 							<div class="col-xs-12 col-md-4" style="float:left">
 								<div class="form-group">
 									<label for="course_class" class="col-sm-12">Course Class</label>
-									<select class="form-control" style="width:95%;margin-left:2%">
+									<select name="course_class_id" class="form-control" style="width:95%;margin-left:2%">
 										<option> -- Select Class -- </option>
 										<t t-foreach="classes" t-as="cl">
 											<div t-if="cl.id == id">
-												<option t-attf-value="{{cl.id}}" t-attf-selected="true" name="course_class_id"><t t-esc="cl.name" /> | <t t-esc="cl.course_id.name" /></option>
+												<option t-attf-value="{{cl.id}}" t-attf-selected="true" ><t t-esc="cl.name" /> | <t t-esc="cl.course_id.name" /></option>
 											</div>
 											<div t-else="else">
-												<option t-attf-value="{{cl.id}}" name="course_class_id"><t t-esc="cl.name" /> | <t t-esc="cl.course_id.name" /></option>
+												<option t-attf-value="{{cl.id}}"><t t-esc="cl.name" /> | <t t-esc="cl.course_id.name" /></option>
 											</div>
 										</t>
 									</select>
