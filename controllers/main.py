@@ -49,8 +49,15 @@ class Academy(http.Controller):
 			obj['birth_date'] = kwargs['birth_date']
 			x = part.create(obj)
 			ob['participant_id'] = x.id
-		cp = http.request.env['training.center.class.participant']
-		cp.create(ob)
+			cp = http.request.env['training.center.class.participant']
+			cp.create(ob)
+		else:
+			participant.write({
+				'name': kwargs['name'],
+				'address': kwargs['address'],
+				'phone': kwargs['phone'],
+				'birth_date': kwargs['birth_date'],
+				})
 		mode = http.request.env['training.center.class']
 		classes = mode.search([['state', '=', 'open']])
 		return http.request.render('training_center.index', {
